@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Theme tokens (RGB triplets so Tailwind can apply opacity) ---------- */
+:root {
+  --canvas: 247 244 236;   /* Warm Cream */
+  --surface: 255 255 255;
+  --raised: 251 249 244;
+  --fg: 23 32 51;          /* Deep Ink */
+  --muted: 105 115 134;    /* Muted Slate */
+  --line: 232 227 214;
+  --nav: 23 32 51;
+  --pos: 22 128 86;        /* mint, darkened for text contrast */
+  --neg: 196 72 45;        /* coral, darkened for text contrast */
+  --ai: 92 76 214;         /* lavender, darkened for text contrast */
+  --warn: 176 112 10;
+  color-scheme: light;
+}
+.dark {
+  --canvas: 17 20 27;      /* deep charcoal */
+  --surface: 26 31 42;
+  --raised: 33 39 53;
+  --fg: 236 234 227;
+  --muted: 152 162 181;
+  --line: 45 53 70;
+  --nav: 12 15 21;
+  --pos: 114 230 176;
+  --neg: 255 139 115;
+  --ai: 184 172 255;
+  --warn: 245 190 90;
+  color-scheme: dark;
+}
+
+html { font-size: var(--base-size, 16px); -webkit-tap-highlight-color: transparent; }
+
+/* Lenis smooth scrolling (see src/lib/smoothScroll.ts) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+/* Page lock while a modal/sheet is open. Only the page is locked; modals scroll on their own. */
+html.scroll-locked { overflow: hidden; }
+body {
+  margin: 0;
+  background: rgb(var(--canvas));
+  color: rgb(var(--fg));
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid #A99BFF; outline-offset: 2px; border-radius: 8px; }
+
+/* Money typography: tabular, tight, confident */
+.money { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; font-feature-settings: 'tnum' 1, 'ss01' 1; }
+
+/* AI surfaces get a faint dotted "thinking" texture */
+.ai-texture {
+  background-image: radial-gradient(rgb(var(--ai) / 0.16) 1px, transparent 1.2px);
+  background-size: 14px 14px;
+}
+
+/* Hand-drawn underline accent, used sparingly */
+.scribble { background: no-repeat left 92% / 100% 0.35em
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8c40-6 90-7 196-3' fill='none' stroke='%2372E6B0' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E"); }
+
+/* ---------- Motion (fast, and off for reduced-motion users) ---------- */
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+@keyframes draw { from { stroke-dashoffset: var(--len, 1000); } to { stroke-dashoffset: 0; } }
+
+.anim-page { animation: page-in .28s ease-out both; }
+.anim-pop { animation: pop-in .22s cubic-bezier(.2,.8,.2,1) both; }
+.anim-fade { animation: fade-in .18s ease-out both; }
+.anim-sheet { animation: sheet-up .26s cubic-bezier(.2,.8,.2,1) both; }
+@media (min-width: 640px) { .anim-sheet { animation: pop-in .22s cubic-bezier(.2,.8,.2,1) both; } }
+.anim-toast { animation: toast-in .22s ease-out both; }
+.anim-grow-x { transform-origin: left; animation: grow-x .7s cubic-bezier(.2,.8,.2,1) both; }
+.anim-grow-y { transform-box: fill-box; transform-origin: bottom; animation: grow-y .6s cubic-bezier(.2,.8,.2,1) both; }
+.anim-draw { stroke-dasharray: var(--len, 1000); animation: draw .9s ease-out both; }
+.skeleton {
+  background: linear-gradient(90deg, rgb(var(--line) / .5) 0, rgb(var(--line)) 50%, rgb(var(--line) / .5) 100%);
+  background-size: 800px 100%; animation: shimmer 1.2s linear infinite; border-radius: 10px;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}
+
+/* ---------- Print: "Export PDF" prints only the report ---------- */
+@media print {
+  body * { visibility: hidden; }
+  #print-area, #print-area * { visibility: visible; }
+  #print-area { position: absolute; inset: 0; padding: 24px; background: #fff; color: #172033; }
+  .no-print { display: none !important; }
+}
