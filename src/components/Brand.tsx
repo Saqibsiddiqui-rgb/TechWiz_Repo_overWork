@@ -6,22 +6,17 @@ import type { IconKey } from '../lib/types';
 import { cx } from '../lib/format';
 
 /** Campus Coin mark: a coin ring with an open "C", topped by a small mortarboard. No dollar sign. */
-export function LogoMark({ size = 36, className }: { size?: number; className?: string }) {
+export function LogoMark() {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" className={className} aria-hidden>
-      <rect width="64" height="64" rx="16" fill="#172033" />
-      <circle cx="32" cy="35" r="17" fill="none" stroke="#72E6B0" strokeWidth="6" />
-      <path d="M40 29a10 10 0 1 0 0 12" fill="none" stroke="#F7F4EC" strokeWidth="5" strokeLinecap="round" />
-      <path d="M32 9l12 6-12 6-12-6z" fill="#A99BFF" />
-    </svg>
+    <img src='Campus-Logo.png' className='h-10 w-10'></img>
   );
 }
 
 export function Logo({ light, size = 34, className }: { light?: boolean; size?: number; className?: string }) {
   return (
     <span className={cx('inline-flex items-center gap-2.5', className)}>
-      <LogoMark size={size} />
-      <span className={cx('text-[1.15rem] font-extrabold tracking-tight', light ? 'text-cream' : 'text-fg')}>
+      <LogoMark />
+      <span className={cx('text-[1.15rem] font-extrabold tracking-tight text-white', light ? 'text-cream' : 'text-fg')}>
         Campus<span className="font-medium opacity-80"> Coin</span>
       </span>
     </span>

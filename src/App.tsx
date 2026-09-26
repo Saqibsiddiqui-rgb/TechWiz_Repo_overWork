@@ -81,7 +81,7 @@ function AppRoutes() {
   if (status === 'loading') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-canvas" role="status" aria-label="Loading Campus Coin">
-        <span className="animate-pulse"><LogoMark size={56} /></span>
+        <span className="animate-pulse"><LogoMark /></span>
         <p className="text-sm font-semibold text-muted">Loading your money&hellip;</p>
       </div>
     );
@@ -90,7 +90,7 @@ function AppRoutes() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas p-6">
         <div className="w-full max-w-md space-y-4 text-center">
-          <LogoMark size={48} className="mx-auto" />
+          <LogoMark />
           <h1 className="text-2xl font-extrabold">We can&rsquo;t reach Campus Coin</h1>
           <ErrorState message={bootError} onRetry={retryBoot} />
         </div>

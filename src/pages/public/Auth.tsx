@@ -15,7 +15,7 @@ function AuthShell({ children, admin }: { children: ReactNode; admin?: boolean }
   const panel = useContent('auth_panel'); // text comes from Admin → Site content
   return (
     <div className="grid min-h-screen lg:grid-cols-[1fr_1.05fr]">
-      <aside className="relative hidden overflow-hidden bg-ink p-12 text-cream lg:flex lg:flex-col">
+      <aside className="relative hidden overflow-hidden bg-nav p-12 text-cream lg:flex lg:flex-col">
         <a href="#/" aria-label="Campus Coin home"><Logo light /></a>
         <div className="my-auto max-w-md">
           {panel && (admin ? (<>
@@ -103,7 +103,7 @@ export function Login({ admin }: { admin?: boolean }) {
         <Input label="Email" type="email" autoComplete="email" value={email} error={errors.email} onChange={(e) => setEmail(e.target.value)} placeholder="you@university.edu.pk" />
         <PasswordInput label="Password" autoComplete="current-password" value={password} onChange={setPassword} error={errors.password} />
         {!admin && <div className="flex justify-end"><a href="#/forgot-password" className="text-sm font-semibold text-muted underline-offset-4 hover:text-fg hover:underline">Forgot password?</a></div>}
-        <Button type="submit" size="lg" block loading={loading}>{admin ? 'Sign in to admin' : 'Log in'}</Button>
+        <Button type="submit" size="lg" className='bg-nav text-white' block loading={loading}>{admin ? 'Sign in to admin' : 'Log in'}</Button>
       </form>
       {demo && (
         <div className="mt-6 rounded-2xl border border-dashed border-line p-4 text-sm">
@@ -175,7 +175,7 @@ export function Register() {
             <Input label="Savings goal" optional prefix="Rs." inputMode="numeric" value={f.goal} error={errors.goal} onChange={(e) => up('goal')(e.target.value.replace(/\D/g, ''))} placeholder="20,000" hint={!errors.goal && f.allowance && !f.goal ? 'We\u2019ll suggest 20% if you skip this' : undefined} />
           </div>
         </fieldset>
-        <Button type="submit" size="lg" block loading={loading}>Create my account</Button>
+        <Button type="submit" size="lg" className='bg-nav text-white' block loading={loading}>Create my account</Button>
         <p className="text-center text-xs text-muted">By continuing you agree to our Terms and Privacy Policy.</p>
       </form>
       <p className="mt-6 text-center text-sm text-muted">Already have an account? <a href="#/login" className="font-bold text-fg underline-offset-4 hover:underline">Log in</a></p>

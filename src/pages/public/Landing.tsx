@@ -87,7 +87,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-canvas text-fg">
       {/* Nav */}
-      <header className="sticky top-0 z-30 bg-canvas/85 backdrop-blur-md" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
+      <header className="sticky top-0 z-30 bg-nav backdrop-blur-md" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
           <a href="#/" aria-label="Campus Coin home"><Logo /></a>
           <nav className="hidden items-center gap-7 text-sm font-semibold text-muted md:flex" aria-label="Sections">
@@ -96,7 +96,7 @@ export default function Landing() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <a href="#/login" className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-fg/5 sm:block border-2 border-nav">{nav?.loginLabel ?? 'Log in'}</a>
+            <a href="#/login" className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-fg/5 sm:block border-2 border-white text-white">{nav?.loginLabel ?? 'Log in'}</a>
             <Button size="sm" className='py-5' onClick={start}>{nav?.ctaLabel ?? 'Start Tracking'}</Button>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function Landing() {
             <h1 className="mt-6 text-[2.9rem] font-extrabold leading-[0.98] tracking-[-0.035em] sm:text-[4.2rem]">{hero.title}</h1>
             <p className="mt-6 max-w-lg text-lg text-muted">{hero.subtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" onClick={start} icon={<Plus className="h-5 w-5" />}>{hero.primaryCta}</Button>
+              <Button size="lg" onClick={start} icon={<Plus className="h-5 w-5 text-white" />}>{hero.primaryCta}</Button>
               <Button size="lg" variant="secondary" onClick={() => scrollTo('how')}>{hero.secondaryCta}</Button>
             </div>
             <p className="mt-6 flex items-center gap-2 text-sm text-muted"><Lock className="h-4 w-4" /> {hero.note}</p>
@@ -163,7 +163,7 @@ export default function Landing() {
 
       {/* How it works */}
       {how && (
-        <section id="how" className="bg-ink text-cream">
+        <section id="how" className="bg-nav text-cream">
           <div className="mx-auto max-w-6xl px-5 py-20">
             <h2 className="text-3xl font-extrabold tracking-tight">{how.title}</h2>
             <ol className="mt-10 grid gap-8 md:grid-cols-3">
@@ -262,7 +262,7 @@ export default function Landing() {
       {/* Final CTA */}
       {cta && (
         <section className="mx-auto max-w-6xl px-5 py-20">
-          <div className="relative overflow-hidden rounded-[2rem] bg-ink px-7 py-14 text-cream sm:px-14">
+          <div className="relative overflow-hidden rounded-[2rem] bg-nav px-7 py-14 text-cream sm:px-14">
             <svg className="absolute -right-12 -top-12 h-64 w-64 opacity-60" viewBox="0 0 100 100" aria-hidden><circle cx="50" cy="50" r="40" fill="none" stroke="#72E6B0" strokeWidth="8" /><circle cx="50" cy="50" r="26" fill="none" stroke="#A99BFF" strokeWidth="2" strokeDasharray="3 5" /></svg>
             <h2 className="relative max-w-xl text-4xl font-extrabold leading-tight tracking-tight">{cta.title}</h2>
             <p className="relative mt-3 max-w-md text-cream/70">{cta.body}</p>
@@ -298,12 +298,12 @@ function HeroPreview({ doodle }: { doodle: string }) {
     <div className="relative mx-auto w-full max-w-[560px]" aria-label="Preview of the Campus Coin dashboard" role="img">
       <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-gradient-to-br from-mint/30 via-transparent to-lavender/30 blur-2xl" aria-hidden />
       <div className="grid grid-cols-5 gap-3">
-        <div className="col-span-3 rounded-card bg-ink p-5 text-cream shadow-lift">
+        <div className="col-span-3 rounded-card bg-nav p-5 text-cream shadow-lift">
           <p className="text-xs font-semibold text-cream/60">{p.balanceLabel}</p>
           <p className="money mt-2 text-[2.1rem] font-extrabold leading-none"><span className="mr-1 text-base opacity-60">Rs.</span>{p.balance.toLocaleString('en-US')}</p>
           <div className="mt-4 flex gap-4 text-xs"><span className="text-mint">+ {rs(p.income)} {p.inLabel}</span><span className="text-coral">− {rs(p.expenses)} {p.outLabel}</span></div>
           <div className="mt-5 flex h-16 items-end gap-1.5">
-            {p.bars.map((h, i) => <span key={i} className="anim-grow-y flex-1 rounded-t-md bg-mint/80" style={{ height: `${Math.max(0, Math.min(100, h))}%`, animationDelay: `${i * 35}ms` }} />)}
+            {p.bars.map((h, i) => <span key={i} className="anim-grow-y flex-1 rounded-t-md bg-canvas" style={{ height: `${Math.max(0, Math.min(100, h))}%`, animationDelay: `${i * 35}ms` }} />)}
           </div>
         </div>
         <div className="col-span-2 flex flex-col justify-between rounded-card border border-line bg-surface p-4 shadow-soft">
@@ -396,7 +396,7 @@ export function SiteFooter() {
         </div>
         {footer?.columns.map((c) => col(c.title, c.links))}
       </div>
-      {footer?.legal && <p className="border-t border-line px-5 py-5 text-center text-xs text-muted">{footer.legal}</p>}
+      {footer?.legal && <p className="border-t border-line px-5 py-5 text-center text-xs text-muted bg-nav">{footer.legal}</p>}
     </footer>
   );
 }

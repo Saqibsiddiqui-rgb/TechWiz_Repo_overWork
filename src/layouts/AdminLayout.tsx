@@ -25,7 +25,7 @@ export function AdminLayout({ path, children }: { path: string; children: ReactN
         {/* Sidebar: same Ink base as the student app, with a lavender "staff" rail so it never feels like the same space */}
         <aside className="fixed inset-y-0 left-0 z-30 hidden w-[84px] flex-col bg-nav px-4 py-5 md:flex lg:w-[256px]" aria-label="Admin navigation">
           <a href="#/admin" aria-label="Campus Coin admin home" className="flex items-center justify-center lg:justify-start lg:px-1">
-            <span className="lg:hidden"><LogoMark size={36} /></span>
+            <span className="lg:hidden"><LogoMark /></span>
             <span className="hidden lg:block"><Logo light /></span>
           </a>
           <p className="mt-4 hidden items-center gap-1.5 self-start rounded-full bg-lavender/20 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-wider text-lavender lg:inline-flex">
@@ -78,7 +78,7 @@ function AdminTopbar({ title, isHome }: { title: string; isHome: boolean }) {
   return (
     <header className="sticky top-0 z-20 bg-canvas/85 backdrop-blur-md" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
       <div className="mx-auto flex h-16 max-w-[1280px] items-center gap-3 px-4 sm:px-6 lg:px-8">
-        <span className="md:hidden"><LogoMark size={32} /></span>
+        <span className="md:hidden"><LogoMark/></span>
         <nav aria-label="Breadcrumb" className="hidden items-center gap-1.5 text-sm md:flex">
           <a href="#/admin" className="font-medium text-muted hover:text-fg">Admin</a>
           {!isHome && <><ChevronRight className="h-4 w-4 text-muted" /><span className="font-semibold">{title}</span></>}

@@ -4,31 +4,31 @@
 
 /* ---------- Theme tokens (RGB triplets so Tailwind can apply opacity) ---------- */
 :root {
-  --canvas: 247 244 236;   /* Warm Cream */
+  --canvas: 194 230 223;   
   --surface: 255 255 255;
   --raised: 251 249 244;
-  --fg: 23 32 51;          /* Deep Ink */
-  --muted: 105 115 134;    /* Muted Slate */
+  --fg: 23 32 51;         
+  --muted: 105 115 134;   
+  --nav: 14 79 76;
   --line: 232 227 214;
-  --nav: 23 32 51;
-  --pos: 22 128 86;        /* mint, darkened for text contrast */
-  --neg: 196 72 45;        /* coral, darkened for text contrast */
-  --ai: 92 76 214;         /* lavender, darkened for text contrast */
+  --pos: 22 128 86;       
+  --neg: 194 230 223;        
+  --ai: 92 76 214;         
   --warn: 176 112 10;
   color-scheme: light;
 }
 .dark {
-  --canvas: 17 20 27;      /* deep charcoal */
-  --surface: 26 31 42;
-  --raised: 33 39 53;
-  --fg: 236 234 227;
-  --muted: 152 162 181;
-  --line: 45 53 70;
-  --nav: 12 15 21;
-  --pos: 114 230 176;
-  --neg: 255 139 115;
-  --ai: 184 172 255;
-  --warn: 245 190 90;
+  --canvas: 194 230 223;      
+  --surface: 255 255 255;
+  --raised: 251 249 244;
+  --fg: 23 32 51;
+  --muted: 105 115 134;
+  --line: 232 227 214;
+  --nav: 14 79 76;
+  --pos: 22 128 86;
+  --neg: 194 230 223;
+  --ai: 92 76 214;
+  --warn: 176 112 10;
   color-scheme: dark;
 }
 
