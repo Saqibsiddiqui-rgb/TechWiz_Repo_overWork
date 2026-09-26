@@ -90,13 +90,13 @@ export default function Landing() {
       <header className="sticky top-0 z-30 bg-nav backdrop-blur-md" style={{ top: 'env(safe-area-inset-top, 0px)' }}>
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
           <a href="#/" aria-label="Campus Coin home"><Logo /></a>
-          <nav className="hidden items-center gap-7 text-sm font-semibold text-muted md:flex" aria-label="Sections">
+          <nav className="hidden items-center gap-7 text-sm font-semibold text-zinc-300 md:flex" aria-label="Sections">
             {nav?.links.map((l) => (
               <a key={l.section} href={`#/?s=${l.section}`} onClick={(e) => { e.preventDefault(); scrollTo(l.section); }} className="hover:text-fg">{l.label}</a>
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <a href="#/login" className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-fg/5 sm:block border-2 border-white text-white">{nav?.loginLabel ?? 'Log in'}</a>
+            <a href="#/login" className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-fg/5 sm:block border-2 border-zinc-300 text-zinc-300">{nav?.loginLabel ?? 'Log in'}</a>
             <Button size="sm" className='py-5' onClick={start}>{nav?.ctaLabel ?? 'Start Tracking'}</Button>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function Landing() {
             <h1 className="mt-6 text-[2.9rem] font-extrabold leading-[0.98] tracking-[-0.035em] sm:text-[4.2rem]">{hero.title}</h1>
             <p className="mt-6 max-w-lg text-lg text-muted">{hero.subtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" onClick={start} icon={<Plus className="h-5 w-5 text-white" />}>{hero.primaryCta}</Button>
+              <Button size="lg" onClick={start} className='text-white bg-nav' icon={<Plus className="h-5 w-5" />}>{hero.primaryCta}</Button>
               <Button size="lg" variant="secondary" onClick={() => scrollTo('how')}>{hero.secondaryCta}</Button>
             </div>
             <p className="mt-6 flex items-center gap-2 text-sm text-muted"><Lock className="h-4 w-4" /> {hero.note}</p>
@@ -396,7 +396,7 @@ export function SiteFooter() {
         </div>
         {footer?.columns.map((c) => col(c.title, c.links))}
       </div>
-      {footer?.legal && <p className="border-t border-line px-5 py-5 text-center text-xs text-muted bg-nav">{footer.legal}</p>}
+      {footer?.legal && <p className="border-t border-line px-5 py-5 text-center text-xs text-zinc-300 bg-nav">{footer.legal}</p>}
     </footer>
   );
 }
