@@ -8,7 +8,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { Button } from '../../components/ui/Button';
 import { Badge, EmptyState, Modal, Skeleton } from '../../components/ui/Feedback';
 import { Card } from '../../components/ui/Card';
-import { AiNote, InsightCard } from '../../components/Finance';
+import { InsightCard } from '../../components/Finance';
 
 export default function Insights() {
   const { insights, cat, toast, generateInsight, transactions } = useStore();
@@ -44,7 +44,6 @@ export default function Insights() {
           </div>
         ) : current ? <InsightCard insight={current} featured onView={() => setViewing(current)} />
           : <Card><EmptyState title="No insights yet" body="Log at least three expenses this month, then tap the button above. Campus Coin AI will explain your month in plain words." /></Card>}
-        <AiNote className="mt-2.5 px-1" />
       </section>
 
       {archive.length > 0 && <section aria-label="Past insights">
@@ -61,7 +60,6 @@ export default function Insights() {
             <div><p className="text-xs font-bold text-muted">Notable pattern</p><p className="mt-1">{viewing.pattern}</p>
               <Badge tone={viewing.change > 0 ? 'neg' : 'pos'} className="mt-2">{cat(viewing.categoryId)?.name ?? 'Top category'} {viewing.change > 0 ? '+' : ''}{viewing.change}% vs your average</Badge></div>
             <div className="rounded-2xl bg-lavender-soft/70 p-4 dark:bg-lavender/10"><p className="text-xs font-bold text-ai">Suggested action</p><p className="mt-1 font-semibold">{viewing.action}</p></div>
-            <AiNote />
           </div>
         )}
       </Modal>

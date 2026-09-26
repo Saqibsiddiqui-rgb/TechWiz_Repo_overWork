@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { CircleCheck, CircleAlert, Info, TriangleAlert, X } from 'lucide-react';
 import { cx } from '../../lib/format';
 import { useStore } from '../../lib/store';
@@ -40,8 +41,8 @@ export function ProgressBar({ value, max, label, size = 'md' }: { value: number;
 }
 
 /* ---------------- Modal (bottom sheet on mobile) ---------------- */
-export function Modal({ open, onClose, title, subtitle, children, footer, size = 'md' }: {
-  open: boolean; onClose: () => void; title: ReactNode; subtitle?: ReactNode; children: ReactNode; footer?: ReactNode; size?: 'md' | 'lg';
+export function Modal({ open, onClose, title, subtitle, children, footer, size = 'md', centered = false }: {
+  open: boolean; onClose: () => void; title: ReactNode; subtitle?: ReactNode; children: ReactNode; footer?: ReactNode; size?: 'md' | 'lg'; centered?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -54,18 +55,18 @@ export function Modal({ open, onClose, title, subtitle, children, footer, size =
     return () => { clearTimeout(t); document.removeEventListener('keydown', onKey); unlock(); prev?.focus({ preventScroll: true }); };
   }, [open, onClose]);
   if (!open) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={typeof title === 'string' ? title : undefined} data-lenis-prevent>
+  return createPortal(
+    <div className={cx('fixed inset-0 z-50', centered ? 'grid place-items-center p-4' : 'flex items-end justify-center sm:items-center sm:p-6')} role="dialog" aria-modal="true" aria-label={typeof title === 'string' ? title : undefined} data-lenis-prevent>
       <div className="anim-fade absolute inset-0 bg-ink/45 backdrop-blur-[2px]" onClick={onClose} />
       <div
         ref={ref}
         className={cx(
-          'anim-sheet relative flex max-h-[92vh] w-full flex-col rounded-t-[1.75rem] border border-line bg-surface shadow-lift sm:rounded-card',
+          `${centered ? 'anim-pop rounded-card' : 'anim-sheet rounded-t-[1.75rem] sm:rounded-card'} relative flex max-h-[92vh] w-full flex-col border border-line bg-surface shadow-lift`,
           size === 'lg' ? 'sm:max-w-3xl' : 'sm:max-w-lg',
         )}
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
-        <div className="mx-auto mt-2.5 h-1.5 w-10 rounded-full bg-line sm:hidden" />
+        {!centered && <div className="mx-auto mt-2.5 h-1.5 w-10 rounded-full bg-line sm:hidden" />}
         <div className="flex items-start justify-between gap-4 px-6 pb-2 pt-4 sm:pt-6">
           <div>
             <h2 className="text-xl font-bold tracking-tight">{title}</h2>
@@ -76,7 +77,8 @@ export function Modal({ open, onClose, title, subtitle, children, footer, size =
         <div className="overflow-y-auto overscroll-contain px-6 pb-6 pt-2" data-lenis-prevent>{children}</div>
         {footer && <div className="flex justify-end gap-2 border-t border-line px-6 py-4">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

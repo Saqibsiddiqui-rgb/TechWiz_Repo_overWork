@@ -3,7 +3,6 @@ import { navigate } from '../../lib/router';
 import { PageHeader } from '../../components/PageHeader';
 import { Card } from '../../components/ui/Card';
 import { TransactionForm } from '../../components/TransactionForm';
-import { AiNote } from '../../components/Finance';
 
 /** Full-page version of the quick-add form (also available as a modal from anywhere). */
 export default function AddTransaction({ type }: { type: TxType }) {
@@ -14,7 +13,6 @@ export default function AddTransaction({ type }: { type: TxType }) {
       <Card className="p-5 sm:p-7">
         <TransactionForm key={type} initialType={type} onDone={() => navigate('/app/transactions')} />
       </Card>
-      <AiNote className="justify-center" />
     </div>
   );
 }

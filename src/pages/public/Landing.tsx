@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import { ArrowRight, Bell, Bookmark, FileDown, Lock, Pin, Plus, Sparkles, Upload, Wallet } from 'lucide-react';
 import { useContent, useStore } from '../../lib/store';
 import { rs } from '../../lib/format';
@@ -7,15 +7,12 @@ import { CategoryIcon } from '../../components/Brand';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/Feedback';
 import { navigate } from '../../lib/router';
-import { scrollToElement } from '../../lib/smoothScroll';
+import { scrollToElement, subscribeToSmoothScroll } from '../../lib/smoothScroll';
 import type { Category, IconKey, SiteContent } from '../../lib/types';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-/*
- * Every piece of text and every example number on this page comes from the site_content table
- * (GET /content). Admins edit it in Admin → Site content. Category icons, colours and names come
- * from the categories table, and the tips from the tips table.
- */
-
+gsap.registerPlugin(ScrollTrigger);
 /** Looks up a default category from the database; unknown ids fall back to a neutral style. */
 function useCategoryLookup() {
   const cats = useStore().site?.categories ?? [];
@@ -40,6 +37,47 @@ export default function Landing() {
   const mobile = useContent('landing_mobile');
   const cta = useContent('landing_cta');
   const tips = site?.tips ?? [];
+  const categoriesSection = useRef<HTMLElement>(null);
+  const categoriesViewport = useRef<HTMLDivElement>(null);
+  const categoriesTrack = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const section = categoriesSection.current;
+    const viewport = categoriesViewport.current;
+    const track = categoriesTrack.current;
+    if (!showcase || !section || !viewport || !track) return;
+
+    const media = gsap.matchMedia();
+    media.add('(min-width: 768px)', () => {
+      const getTravelDistance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
+      const getScrollDistance = () => getTravelDistance() * 3;
+      if (getTravelDistance() === 0) return;
+
+      const unsubscribe = subscribeToSmoothScroll(ScrollTrigger.update);
+      gsap.to(track, {
+        x: () => -getTravelDistance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top+=64',
+          end: () => `+=${getScrollDistance()}`,
+          pin: true,
+          pinSpacing: true,
+          scrub: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      return unsubscribe;
+    });
+
+    return () => media.revert();
+  }, [showcase]);
+
+
+
+
   // While developing, say out loud which sections are missing instead of silently hiding them
   const sections = { landing_nav: nav, landing_hero: hero, landing_why: why, landing_categories: showcase, landing_how: how,
     landing_insight: insight, landing_budgets: budgets, landing_tips: tipsSection, landing_mobile: mobile, landing_cta: cta };
@@ -58,8 +96,8 @@ export default function Landing() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <a href="#/login" className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-fg/5 sm:block">{nav?.loginLabel ?? 'Log in'}</a>
-            <Button size="sm" onClick={start}>{nav?.ctaLabel ?? 'Start Tracking'}</Button>
+            <a href="#/login" className="hidden rounded-xl px-3 py-2 text-sm font-semibold hover:bg-fg/5 sm:block border-2 border-nav">{nav?.loginLabel ?? 'Log in'}</a>
+            <Button size="sm" className='py-5' onClick={start}>{nav?.ctaLabel ?? 'Start Tracking'}</Button>
           </div>
         </div>
       </header>
@@ -104,20 +142,21 @@ export default function Landing() {
 
       {/* Categories */}
       {showcase && (
-        <section className="mx-auto max-w-6xl px-5 py-20">
+        <section ref={categoriesSection} className="mx-auto max-w-6xl px-5 py-20" id="Scroll">
           <h2 className="max-w-xl text-3xl font-extrabold tracking-tight">{showcase.title}</h2>
           <p className="mt-3 max-w-xl text-muted">{showcase.subtitle}</p>
-          <div className="no-scrollbar -mx-5 mt-8 flex gap-3 overflow-x-auto px-5 pb-2">
-            {showcase.examples.map((e, i) => {
-              const c = catOf(e.categoryId);
-              return (
-                <div key={`${e.name}-${i}`} className="flex min-w-[170px] flex-col gap-3 rounded-card border border-line bg-surface p-4 shadow-soft">
-                  <CategoryIcon icon={c.icon} color={c.color} size="lg" />
-                  <div><p className="font-bold">{e.name}</p><p className="text-xs text-muted">{c.name}</p></div>
-                  <p className="money text-lg font-extrabold">− {rs(e.amount)}</p>
-                </div>
-              );
-            })}
+          <div ref={categoriesViewport} className="no-scrollbar -mx-5 mt-8 overflow-x-auto px-5 pb-2 md:overflow-hidden">
+            <div ref={categoriesTrack} className="flex w-max gap-3">
+              {showcase.examples.map((e, i) => {
+                const c = catOf(e.categoryId);
+                return (
+                  <div key={`${e.name}-${i}`} className="flex w-[170px] shrink-0 flex-col gap-3 rounded-card border border-line bg-surface p-4 shadow-soft">
+                    <CategoryIcon icon={c.icon} color={c.color} size="lg" />
+                    <div><p className="font-bold">{e.name}</p><p className="text-xs text-muted">{c.name}</p></div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}

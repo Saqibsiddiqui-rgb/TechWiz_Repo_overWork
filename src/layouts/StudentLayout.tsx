@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import Lenis from 'lenis';
 import {
   ArrowLeftRight, Bell, Bookmark, ChartColumn, ChevronRight, House, Lightbulb, LogOut, Menu, Moon, PanelLeftClose,
   PanelLeftOpen, Plus, Search, Settings, Shapes, Sparkles, Sun, Target, User, X, Minus,
@@ -71,7 +72,26 @@ function NavLink({ to, label, icon: Icon, active, collapsed, badge }: { to: stri
 
 function Sidebar({ route, collapsed, onToggle }: { route: string; collapsed: boolean; onToggle: () => void }) {
   const { profile, notifications } = useStore();
+  const scrollRef = useRef<HTMLDivElement>(null);
   const unread = notifications.filter((n) => !n.read).length;
+  useEffect(() => {
+    const wrapper = scrollRef.current;
+    const content = wrapper?.firstElementChild;
+    if (!wrapper || !(content instanceof HTMLElement)) return;
+
+    const sidebarScroll = new Lenis({
+      wrapper,
+      content,
+      lerp: 0.1,
+      duration: 1.5,
+      smoothWheel: true,
+      syncTouch: true,
+      respectReducedMotion: false,
+      autoRaf: true,
+    });
+    return () => sidebarScroll.destroy();
+  }, []);
+
   return (
     <aside className={cx('fixed inset-y-0 left-0 z-30 hidden flex-col bg-nav px-4 py-5 transition-[width] duration-200 md:flex', collapsed ? 'w-[84px]' : 'w-[264px]')}
       aria-label="Main navigation">
@@ -83,20 +103,24 @@ function Sidebar({ route, collapsed, onToggle }: { route: string; collapsed: boo
         {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
       </button>
 
-      <nav className="mt-8 flex-1 space-y-1">
-        {studentNav.map((n) => <NavLink key={n.to} {...n} active={route === n.to} collapsed={collapsed} />)}
-      </nav>
+      <div ref={scrollRef} className="sidebar-scroll mt-8 min-h-0 flex-1 overflow-y-auto" data-lenis-scroll>
+        <div className="shrink-0">
+          <nav className="space-y-1">
+            {studentNav.map((n) => <NavLink key={n.to} {...n} active={route === n.to} collapsed={collapsed} />)}
+          </nav>
 
-      {!collapsed && (
-        <div className="mb-4 overflow-hidden rounded-2xl bg-cream/[.06] p-4">
-          <p className="text-sm font-bold text-cream">Log it while it&rsquo;s fresh</p>
-          <p className="mt-1 text-xs text-cream/60">Adding a chai takes five seconds.</p>
-          <div className="mt-3 flex gap-2">
-            <QuickBtn type="expense" />
-            <QuickBtn type="income" />
-          </div>
+          {!collapsed && (
+            <div className="mb-4 mt-4 overflow-hidden rounded-2xl bg-cream/[.06] p-4">
+              <p className="text-sm font-bold text-cream">Log it while it&rsquo;s fresh</p>
+              <p className="mt-1 text-xs text-cream/60">Adding a chai takes five seconds.</p>
+              <div className="mt-3 flex gap-2">
+                <QuickBtn type="expense" />
+                <QuickBtn type="income" />
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="space-y-1 border-t border-cream/10 pt-4">
         {secondaryNav.map((n) => <NavLink key={n.to} {...n} active={route === n.to} collapsed={collapsed} badge={n.to === '/app/notifications' ? unread : undefined} />)}

@@ -151,7 +151,7 @@ function EmailModal({ open, onClose, from, until }: { open: boolean; onClose: ()
   const [err, setErr] = useState('');
   const [sending, setSending] = useState(false);
   return (
-    <Modal open={open} onClose={onClose} title="Email this report" subtitle="We'll email a summary of income, expenses and categories for the selected dates."
+    <Modal open={open} onClose={onClose} centered title="Email this report" subtitle="We'll email a summary of income, expenses and categories for the selected dates."
       footer={<><Button variant="ghost" onClick={onClose}>Cancel</Button><Button loading={sending} icon={<Mail className="h-4 w-4" />} onClick={() => {
         if (!/^\S+@\S+\.\S+$/.test(email)) return setErr('Enter a valid email address, like you@university.edu.pk');
         if (from > until) return setErr('Fix the report dates first: the start date is after the end date.');

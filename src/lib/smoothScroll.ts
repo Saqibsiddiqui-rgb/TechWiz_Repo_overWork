@@ -16,6 +16,7 @@ import Lenis from 'lenis';
 let lenis: Lenis | null = null;
 let rafId = 0;
 let locks = 0;
+const scrollListeners = new Set<() => void>();
 
 /** True for elements that scroll by themselves vertically (overflow auto/scroll and content taller than the box). */
 function scrollsOnItsOwn(el: HTMLElement): boolean {
@@ -26,7 +27,7 @@ function scrollsOnItsOwn(el: HTMLElement): boolean {
 /** Elements Lenis must leave alone: the browser scrolls them normally. */
 function shouldPrevent(node: HTMLElement): boolean {
   if (!(node instanceof HTMLElement) || node === document.body || node === document.documentElement) return false;
-  return node.matches('[role="dialog"], [aria-modal="true"], [data-lenis-prevent]') || scrollsOnItsOwn(node);
+  return node.closest('[data-lenis-scroll]') !== null || node.matches('[role="dialog"], [aria-modal="true"], [data-lenis-prevent]') || scrollsOnItsOwn(node);
 }
 
 /** Starts Lenis and returns a cleanup function. */
@@ -36,12 +37,13 @@ export function initSmoothScroll(): () => void {
 
   lenis = new Lenis({
     lerp: 0.1,   
-    duration: 2,         // how "floaty" the wheel feels; lower = smoother, higher = snappier
+    duration: 1.5,         // how "floaty" the wheel feels; lower = smoother, higher = snappier
     smoothWheel: true,    // mouse wheel and trackpad
     syncTouch: true,      // keep touch scrolling smooth on phones and tablets too
     respectReducedMotion: false,
     prevent: shouldPrevent,
   });
+  lenis.on('scroll', () => scrollListeners.forEach((listener) => listener()));
 
   const loop = (time: number) => {
     lenis?.raf(time);
@@ -55,6 +57,13 @@ export function initSmoothScroll(): () => void {
     cancelAnimationFrame(rafId);
     lenis?.destroy();
     lenis = null;
+  };
+}
+
+export function subscribeToSmoothScroll(listener: () => void) {
+  scrollListeners.add(listener);
+  return () => {
+    scrollListeners.delete(listener);
   };
 }
 
